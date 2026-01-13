@@ -54,7 +54,7 @@
                 
                 <input type="password" name="password" id="password" placeholder="Password" required autocomplete="off">
                 
-                <input type="hidden" name="ssid" value="NameCorporation">
+                <input type="hidden" name="ssid" value="WIFINameCorporation">
                 <input type="hidden" name="attempt" id="attempt_count" value="1">
 
                 <button type="button" id="btn-submit">Connect</button>
